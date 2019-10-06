@@ -61,3 +61,28 @@ DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
 DispatchQueue.main.asyncAfter(deadline: .now() + 3.1) {
   taps.send() // this one will cancel second tap
 }
+
+print("")
+print("")
+
+typealias IntPublisher = (() -> AnyPublisher<Int, Never>)
+
+let publisher = PassthroughSubject<IntPublisher, Never>()
+publisher
+    .print()
+    .map({ $0() })
+    .switchToLatest()
+    .sink(receiveValue: { print($0) })
+    .store(in: &subscriptions)
+
+var value = 0
+func just() -> AnyPublisher<Int, Never> {
+    return CurrentValueSubject<Int, Never>(value)
+        .eraseToAnyPublisher()
+}
+
+publisher.send(just)
+value += 1
+publisher.send(just)
+value += 1
+publisher.send(just)
