@@ -39,10 +39,7 @@ class ForecastViewModel: ObservableObject {
             return
         }
         state = .loading
-        repository
-            .locationPublisher()            
-            .flatMap({ self.repository.forecastPublisher(location: $0)})
-            .print()
+        repository.forecast()            
             .receive(on: RunLoop.main)
             .sink(receiveCompletion: { completion in
                 switch completion {

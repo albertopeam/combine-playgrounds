@@ -10,8 +10,6 @@ import Foundation
 import Combine
 import CoreLocation
 
-//TODO: test errors
-//TODO: unit testing
 class ForecastRepository {
     enum Error: Swift.Error, Equatable {
         case disabled
@@ -28,8 +26,16 @@ class ForecastRepository {
         self.locationManager = locationManager
     }
     
-    //TODO: hide this two methods in a only method if possible
-    func locationPublisher() -> AnyPublisher<CLLocation, Error> {
+    func forecast() -> AnyPublisher<City, Error> {
+        return locationPublisher()
+            .flatMap({ self.forecastPublisher(location: $0)})
+            .print()
+            .eraseToAnyPublisher()
+    }
+    
+    // MARK: - private
+    
+    private func locationPublisher() -> AnyPublisher<CLLocation, Error> {
         return locationManager
             .oneShotLocation()
             .mapError({
@@ -46,7 +52,7 @@ class ForecastRepository {
             }).eraseToAnyPublisher()
     }
     
-    func forecastPublisher(location: CLLocation) -> AnyPublisher<City, Error> {
+    private func forecastPublisher(location: CLLocation) -> AnyPublisher<City, Error> {
         let coordinate = location.coordinate
         let lat = coordinate.latitude
         let lon = coordinate.longitude
