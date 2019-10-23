@@ -3,8 +3,6 @@ import Combine
 var subscriptions = Set<AnyCancellable>()
 
 let items = [1, 2, 3, 5, 7, 11, 13]
-    
-let publisher = items.publisher.share()
 
 let at: Int = 2
 items.publisher
