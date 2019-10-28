@@ -5,7 +5,7 @@ var subscriptions = Set<AnyCancellable>()
 URLSession.shared
     .dataTaskPublisher(for: URL(string: "https://www.raywenderlich.com/")!)
     .receive(on: RunLoop.main)
-    .handleEvents(receiveSubscription: { _ in
+    .handleEvents(receiveSubscription: { _ in // makes side effects changes not related to downstream, it is executed in main inclusive without the receive(on:)
         print("Network request will start")
     }, receiveOutput: { _ in
         print("Network request data received")
