@@ -2,25 +2,28 @@ import Combine
 import Foundation
 
 var subscriptions = Set<AnyCancellable>()
-let subject = PassthroughSubject<Data, URLError>()
+
 let multicast = URLSession.shared
     .dataTaskPublisher(for: URL(string: "https://www.raywenderlich.com")!)
     .map(\.data)
     .print("multicast")
-    .multicast(subject: subject)
+    .multicast(subject: PassthroughSubject<Data, URLError>())
+    // .autoconnect() this way it will be autoconnected, but we assume the risk that the task will be ended before all the subscribers are subscribed, then some of them won´t receive data never
 
-subject
-    .print("not delayed")
-    .sink(receiveCompletion: { _ in }, receiveValue: { print($0) })
+multicast
+    .sink(receiveCompletion: { _ in }, receiveValue: { print("subscriber1: \($0)") })
     .store(in: &subscriptions)
 
-DispatchQueue.main.schedule(after: .init(.now() + 2.5)) {
-    subject
-        .print("delayed")
-        .sink(receiveCompletion: { _ in }, receiveValue: { print($0) })
+DispatchQueue.main.schedule(after: .init(.now() + 1)) {
+    multicast
+        .sink(receiveCompletion: { _ in }, receiveValue: { print("subscriber2: \($0)") })
         .store(in: &subscriptions)
-    
-    multicast.connect() // we need to connect before sending events, after this all subscribers will see all the data
-    subject.send(Data()) // it doesn´t start to fetch network data..., so we fake it.
 }
+
+var cancelable: Cancellable?
+DispatchQueue.main.schedule(after: .init(.now() + 2.5)) {
+    cancelable = multicast.connect() // if we want to be able to ensure that all our subscribers receive the same data, we must to connect after all the subscribers are done with the subscription
+}
+
+
 
