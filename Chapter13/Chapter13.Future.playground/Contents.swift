@@ -5,6 +5,7 @@ var subscriptions = Set<AnyCancellable>()
 
 let publisher: AnyPublisher<Data, Error> = Future<Data, Error> { (promise) in
     print("future starts")
+    // future starts inmediatly
     URLSession.shared.dataTask(with: URL(string: "https://google.es")!) { (data, response, error) in
         if let data = data {
             promise(.success(data))
