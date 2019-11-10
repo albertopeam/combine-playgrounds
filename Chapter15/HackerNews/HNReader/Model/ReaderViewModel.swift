@@ -27,24 +27,38 @@
 /// THE SOFTWARE.
 
 import Foundation
+import Combine
 
 class ReaderViewModel {
-  private let api = API()
-  private var allStories = [Story]()
-
-  var filter = [String]()
-  
-  var stories: [Story] {
-    guard !filter.isEmpty else {
-      return allStories
-    }
-    return allStories
-      .filter { story -> Bool in
-        return filter.reduce(false) { isMatch, keyword -> Bool in
-          return isMatch || story.title.lowercased().contains(keyword)
+    private let api = API()
+    private var allStories = [Story]()
+    private var subscriptions: Set<AnyCancellable> = .init()
+    var error: API.Error? = nil
+    var filter = [String]()
+    var stories: [Story] {
+        guard !filter.isEmpty else {
+            return allStories
         }
-      }
-  }
-  
-  var error: API.Error? = nil
+        return allStories.filter { story -> Bool in
+            return filter.reduce(false) { isMatch, keyword -> Bool in
+                return isMatch || story.title.lowercased().contains(keyword)
+                }
+            }
+    }
+    
+    func fetchStories() {
+        api.stories()
+            .print()
+            .receive(on: RunLoop.main)
+            .sink(receiveCompletion: { completion in
+                switch completion {
+                case .finished: break
+                case let .failure(apiError): self.error = apiError
+                }
+            },receiveValue: {
+                self.allStories = $0
+                self.error = nil
+            })
+            .store(in: &subscriptions)
+    }
 }

@@ -75,6 +75,8 @@ struct ReaderView: View {
                 self.presentingSettingsSheet = true
             }
           )
+        }.onAppear {
+            self.model.fetchStories()
         }
     }
 }
