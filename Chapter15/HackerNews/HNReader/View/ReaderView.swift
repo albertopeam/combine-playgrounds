@@ -43,38 +43,39 @@ struct ReaderView: View {
         let filter = "Showing all stories"
 
         return NavigationView {
-          List {
-            Section(header: Text(filter).padding(.leading, -10)) {
-              ForEach(self.model.allStories) { story in
-                VStack(alignment: .leading, spacing: 10) {
-                  TimeBadge(time: story.time)
-                  
-                  Text(story.title)
-                    .frame(minHeight: 0, maxHeight: 100)
-                    .font(.title)
-                  
-                  PostedBy(time: story.time, user: story.by, currentDate: self.currentDate)
-                  
-                  Button(story.url) {
-                    print(story)
+            List {
+                Section(header: Text(filter).padding(.leading, -10)) {
+                  ForEach(self.model.allStories) { story in
+                    VStack(alignment: .leading, spacing: 10) {
+                      TimeBadge(time: story.time)
+                      
+                      Text(story.title)
+                        .frame(minHeight: 0, maxHeight: 100)
+                        .font(.title)
+                      
+                      PostedBy(time: story.time, user: story.by, currentDate: self.currentDate)
+                      
+                      Button(story.url) {
+                        print(story)
+                      }
+                      .font(.subheadline)
+                      .foregroundColor(Color.blue)
+                      .padding(.top, 6)
+                    }
+                    .padding()
                   }
-                  .font(.subheadline)
-                  .foregroundColor(Color.blue)
-                  .padding(.top, 6)
-                }
-                .padding()
-              }
-              // Add timer here
-            }.padding()
-          }
-          .sheet(isPresented: self.$presentingSettingsSheet, content: { SettingsView() })
-          // Display errors here
-          .navigationBarTitle(Text("\(self.model.stories.count) Stories"))
-          .navigationBarItems(trailing:
-            Button("Settings") {
-                self.presentingSettingsSheet = true
+                  // Add timer here
+                }.padding()
             }
-          )
+            .sheet(isPresented: self.$presentingSettingsSheet, content: { SettingsView() })
+            .alert(item: self.$model.error, content: { error in
+                Alert(title: Text("Network error"), message: Text(error.localizedDescription), dismissButton: .cancel())
+            })
+            .navigationBarTitle(Text("\(self.model.stories.count) Stories"))
+            .navigationBarItems(trailing:
+                Button("Settings") {
+                    self.presentingSettingsSheet = true
+            })
         }.onAppear {
             self.model.fetchStories()
         }
