@@ -30,10 +30,12 @@ import SwiftUI
 import Combine
 
 struct ReaderView: View {
-    @ObservedObject var model: ReaderViewModel
+    @ObservedObject private var model: ReaderViewModel
     @State private var presentingSettingsSheet = false
-
-    var currentDate = Date()
+    @State private var currentDate = Date()
+    private let timer = Timer.publish(every: 10, on: RunLoop.main, in: .common)
+        .autoconnect()
+        .eraseToAnyPublisher()
   
     init(model: ReaderViewModel) {
         self.model = model
@@ -78,6 +80,8 @@ struct ReaderView: View {
             })
         }.onAppear {
             self.model.fetchStories()
+        }.onReceive(timer) { (output) in
+            self.currentDate = output
         }
     }
 }
