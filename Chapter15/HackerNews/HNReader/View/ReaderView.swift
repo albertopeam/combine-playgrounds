@@ -30,7 +30,7 @@ import SwiftUI
 import Combine
 
 struct ReaderView: View {
-    var model: ReaderViewModel
+    @ObservedObject var model: ReaderViewModel
     @State private var presentingSettingsSheet = false
 
     var currentDate = Date()
@@ -45,7 +45,7 @@ struct ReaderView: View {
         return NavigationView {
           List {
             Section(header: Text(filter).padding(.leading, -10)) {
-              ForEach(self.model.stories) { story in
+              ForEach(self.model.allStories) { story in
                 VStack(alignment: .leading, spacing: 10) {
                   TimeBadge(time: story.time)
                   

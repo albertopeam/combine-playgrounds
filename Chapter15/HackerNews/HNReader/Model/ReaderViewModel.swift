@@ -28,12 +28,14 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
-class ReaderViewModel {
-    private let api = API()
-    private var allStories = [Story]()
+class ReaderViewModel: ObservableObject {
+    @Published var allStories = [Story]()
+    @Published var error: API.Error? = nil
     private var subscriptions: Set<AnyCancellable> = .init()
-    var error: API.Error? = nil
+    private let api = API()
+    
     var filter = [String]()
     var stories: [Story] {
         guard !filter.isEmpty else {
