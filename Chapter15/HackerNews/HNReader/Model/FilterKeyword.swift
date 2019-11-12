@@ -26,9 +26,9 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 /// THE SOFTWARE.
 
-import SwiftUI
+import Foundation
 
 struct FilterKeyword: Identifiable, Codable {
-  var id: String { value }
-  let value: String
+    var id: String { value }
+    let value: String
 }

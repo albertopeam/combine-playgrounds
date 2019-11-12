@@ -27,9 +27,10 @@
 /// THE SOFTWARE.
 
 import Foundation
+import Combine
 
-final class Settings {
-  init() { }
-  
-  var keywords = [FilterKeyword]()
+final class Settings: ObservableObject {
+    @Published var keywords = [FilterKeyword]()
+    
+    init() { }
 }

@@ -33,10 +33,19 @@ import SwiftUI
 class ReaderViewModel: ObservableObject {
     @Published var allStories = [Story]()
     @Published var error: API.Error? = nil
+    @Published var filter = [String]()
     private var subscriptions: Set<AnyCancellable> = .init()
     private let api = API()
+    private var settings: Settings
     
-    var filter = [String]()
+    init(settings: Settings) {
+        self.settings = settings
+        settings.$keywords
+            .map { $0.map { $0.value } }
+            .assign(to: \.filter, on: self)
+            .store(in: &subscriptions)
+    }
+        
     var stories: [Story] {
         guard !filter.isEmpty else {
             return allStories
