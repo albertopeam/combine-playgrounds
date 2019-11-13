@@ -57,6 +57,13 @@ class ReaderViewModel: ObservableObject {
             }
     }
     
+    var filtersDescription: String {
+        guard !filter.isEmpty else {
+            return "Showing all stories"
+        }
+        return "Filter: \(filter.joined(separator: ", "))"
+    }
+    
     func fetchStories() {
         api.stories()
             .print()

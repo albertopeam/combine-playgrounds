@@ -44,11 +44,9 @@ struct ReaderView: View {
     }
   
     var body: some View {
-        let filter = "Showing all stories"
-
         return NavigationView {
             List {
-                Section(header: Text(filter).padding(.leading, -10)) {
+                Section(header: Text(self.model.filtersDescription).padding(.leading, -10)) {
                   ForEach(self.model.stories) { story in
                     VStack(alignment: .leading, spacing: 10) {
                       TimeBadge(time: story.time)
