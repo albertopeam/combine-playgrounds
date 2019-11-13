@@ -38,6 +38,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let settings = Settings()
         let viewModel = ReaderViewModel(settings: settings)
         let rootView = ReaderView(model: viewModel)
+            .environmentObject(settings)
         if let windowScene = scene as? UIWindowScene {
             let window = UIWindow(windowScene: windowScene)
             window.rootViewController = UIHostingController(rootView: rootView)

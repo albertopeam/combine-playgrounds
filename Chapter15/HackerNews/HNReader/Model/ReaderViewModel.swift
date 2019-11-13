@@ -52,7 +52,7 @@ class ReaderViewModel: ObservableObject {
         }
         return allStories.filter { story -> Bool in
             return filter.reduce(false) { isMatch, keyword -> Bool in
-                return isMatch || story.title.lowercased().contains(keyword)
+                return isMatch || story.title.lowercased().contains(keyword.lowercased())
                 }
             }
     }

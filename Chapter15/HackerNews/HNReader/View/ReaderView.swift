@@ -30,7 +30,8 @@ import SwiftUI
 import Combine
 
 struct ReaderView: View {
-    @Environment(\.colorScheme) var colorScheme: ColorScheme
+    @EnvironmentObject var settings: Settings
+    @Environment(\.colorScheme) var colorScheme: ColorScheme    
     @ObservedObject private var model: ReaderViewModel
     @State private var presentingSettingsSheet = false
     @State private var currentDate = Date()
@@ -48,7 +49,7 @@ struct ReaderView: View {
         return NavigationView {
             List {
                 Section(header: Text(filter).padding(.leading, -10)) {
-                  ForEach(self.model.allStories) { story in
+                  ForEach(self.model.stories) { story in
                     VStack(alignment: .leading, spacing: 10) {
                       TimeBadge(time: story.time)
                       
@@ -70,7 +71,9 @@ struct ReaderView: View {
                   // Add timer here
                 }.padding()
             }
-            .sheet(isPresented: self.$presentingSettingsSheet, content: { SettingsView() })
+            .sheet(isPresented: self.$presentingSettingsSheet, content: {
+                SettingsView().environmentObject(self.settings) // modals doesn´t share environment auto, so we need to inject them manually
+            })
             .alert(item: self.$model.error, content: { error in
                 Alert(title: Text("Network error"), message: Text(error.localizedDescription), dismissButton: .cancel())
             })
