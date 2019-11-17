@@ -16,6 +16,6 @@ names.publisher
             throw NameError.tooShort(name)
         }
         return name.count
-    })
+    }) // try map also erases the error to a plain Swift.Error
     .sink(receiveCompletion: { print($0) }, receiveValue: { print($0)  })
     .store(in: &subscriptions)
