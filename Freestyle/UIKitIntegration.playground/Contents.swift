@@ -8,7 +8,7 @@ class Button: UIButton {
     var tap: AnyPublisher<Void, Never> {
         return _tap.eraseToAnyPublisher()
     }
-    var isTapable: PassthroughSubject<Bool, Never> = .init()
+    let isTapable: PassthroughSubject<Bool, Never> = .init()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
