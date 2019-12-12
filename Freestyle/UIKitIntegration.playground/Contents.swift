@@ -51,25 +51,33 @@ class TextField: UITextField {
 
 class FormView: UIView {
 
-    let textField: TextField = .init(frame: .init(x: 0, y: 0, width: 180, height: 40))
-    let button: Button = .init(frame: .init(x: 0, y: 0, width: 128, height: 40))
+    let textField: TextField = .init(frame: .zero)
+    let button: Button = .init(frame: .zero)
 
     init() {
         super.init(frame: .zero)
         backgroundColor = .white
-        frame = CGRect.init(x: 0, y: 0, width: 480, height: 480)
+        translatesAutoresizingMaskIntoConstraints = false
 
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.center = CGPoint(x: frame.midX, y: frame.midY)
         button.setTitle("Tap me!", for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.setTitleColor(.gray, for: .disabled)
         addSubview(button)
 
-        textField.center = CGPoint(x: frame.midX, y: frame.midY - 64)
+        textField.translatesAutoresizingMaskIntoConstraints = false
         textField.placeholder = "username >3 & <7"
         textField.textAlignment = .center
         textField.borderStyle = .roundedRect
         addSubview(textField)
+
+        NSLayoutConstraint.activate([
+            textField.centerXAnchor.constraint(equalTo: centerXAnchor),
+            textField.bottomAnchor.constraint(equalTo: button.topAnchor, constant: -24),
+            button.centerXAnchor.constraint(equalTo: centerXAnchor),
+            button.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
     }
 
     required init?(coder: NSCoder) {
@@ -108,7 +116,11 @@ class ViewController: UIViewController {
     init(view: UIView, model: AnyObject) {
         self.model = model
         super.init(nibName: nil, bundle: nil)
-        self.view = view
+        self.view.addSubview(view)
+        NSLayoutConstraint.activate([
+            view.heightAnchor.constraint(equalTo: self.view.heightAnchor),
+            view.widthAnchor.constraint(equalTo: self.view.widthAnchor)
+        ])
     }
 
     required init?(coder: NSCoder) {
