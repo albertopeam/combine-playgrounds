@@ -85,10 +85,6 @@ extension Publishers {
             self.capacity = capacity
         }
 
-//        deinit {
-//            replay.removeAll() //TODO: double check
-//        }
-
         func receive<S>(subscriber: S) where S : Subscriber, Failure == S.Failure, Output == S.Input {
             lock.lock()
             defer { lock.unlock() }
@@ -131,4 +127,45 @@ extension Publishers {
   }
 }
 
+extension Publisher {
+    func replay(capacity: Int = .max) -> Publishers.ShareReplay<Self> {
+        return Publishers.ShareReplay(upstream: self, capacity: capacity)
+    }
+}
+
+
+
+
+let capacity = 2
+let subject = PassthroughSubject<Int, Never>()
+let publisher = subject.replay(capacity: capacity)
+subject.send(1) //never captured by any of the subscribers
+
 var subscriptions = Set<AnyCancellable>()
+
+// it will receive subject emitted values after subscription, emitted before won´t be send
+publisher
+    .sink(receiveCompletion: { print("1.replayCompleted: \($0)") },
+          receiveValue: { print("1.replay \($0)") })
+    .store(in: &subscriptions)
+
+subject.send(2)
+subject.send(3)
+subject.send(4)
+subject.send(completion: .finished)
+
+// it will receive last capacity values and next ones
+publisher
+    .sink(receiveCompletion: { print("2.replayCompleted: \($0)") },
+          receiveValue: { print("2.replay \($0)") })
+    .store(in: &subscriptions)
+
+// it will receive last capacity values and finish
+DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+    print("Subscribing to replay after upstream completed")
+    publisher
+        .sink(receiveCompletion: { print("3.replayDelayedCompleted: \($0)") },
+              receiveValue: { print("3.replayDelayed \($0)") })
+        .store(in: &subscriptions)
+}
+
