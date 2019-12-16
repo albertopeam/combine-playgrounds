@@ -137,9 +137,11 @@ extension Publisher {
 
 
 let capacity = 2
-let subject = PassthroughSubject<Int, Never>()
-let publisher = subject.replay(capacity: capacity)
-subject.send(1) //never captured by any of the subscribers
+let subject = CurrentValueSubject<Int, Never>(0) // for some reason this is sended.. if we use a CurrentValueSubject
+let publisher = subject
+    .print("REPLAY") // check that the publisher subscription is once
+    .replay(capacity: capacity)
+//subject.send(1) // Send an initial value through the subject. No subscriber has connected to the shared publisher, so you shouldn’t see any output.
 
 var subscriptions = Set<AnyCancellable>()
 
@@ -168,4 +170,3 @@ DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
               receiveValue: { print("3.replayDelayed \($0)") })
         .store(in: &subscriptions)
 }
-
