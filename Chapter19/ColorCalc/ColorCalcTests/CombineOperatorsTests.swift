@@ -30,8 +30,18 @@ import XCTest
 import Combine
 
 class CombineOperatorsTests: XCTestCase {
-  
-  override func tearDown() {
-    
-  }
+
+    private var subscriptions = Set<AnyCancellable>()
+
+    override func tearDown() {
+        subscriptions = []
+    }
+
+    func testGivenNonEmptyArrayOfItemsWhenCollectThenMatchArray() {
+        let values = [0, 1, 2]
+        values.publisher
+            .collect()
+            .sink(receiveValue: { XCTAssertEqual($0, values)})
+            .store(in: &subscriptions)
+    }
 }
