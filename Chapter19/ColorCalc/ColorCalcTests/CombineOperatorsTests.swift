@@ -44,4 +44,32 @@ class CombineOperatorsTests: XCTestCase {
             .sink(receiveValue: { XCTAssertEqual($0, values)})
             .store(in: &subscriptions)
     }
+
+    func testGivenFlatMapMax2PublisherWhenSendFrom3ThenCut() {
+        let intSubject1 = PassthroughSubject<Int, Never>()
+        let intSubject2 = PassthroughSubject<Int, Never>()
+        let intSubject3 = PassthroughSubject<Int, Never>()
+        let publisher = CurrentValueSubject<PassthroughSubject<Int, Never>, Never>(intSubject1)
+        let expected = [1, 2, 4]
+
+        var results = [Int]()
+        publisher
+            .flatMap(maxPublishers: .max(2), { $0 })
+            .sink(receiveValue: { results.append($0) })
+            .store(in: &subscriptions)
+
+        intSubject1.send(1)
+
+        publisher.send(intSubject2)
+        intSubject2.send(2)
+
+        publisher.send(intSubject3) // it won´t be accepted because of the constraint .max(2)
+        intSubject3.send(3)
+
+        intSubject2.send(4)
+
+        publisher.send(completion: .finished)
+
+        XCTAssertEqual(results, expected)
+    }
 }
