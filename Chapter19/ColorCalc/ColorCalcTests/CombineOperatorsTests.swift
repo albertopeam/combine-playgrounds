@@ -72,4 +72,26 @@ class CombineOperatorsTests: XCTestCase {
 
         XCTAssertEqual(results, expected)
     }
+
+    func test_timerPublish() {
+        func normalized(_ ti: TimeInterval) -> TimeInterval {
+            return Double(round(ti * 10) / 10)
+        }
+        let now = Date().timeIntervalSinceReferenceDate
+        let expectation = self.expectation(description: #function)
+        let expected = [0.5, 1, 1.5]
+        var results = [TimeInterval]()
+        let publisher = Timer
+            .publish(every: 0.5, on: .main, in: .common)
+            .autoconnect()
+            .prefix(3)
+
+        publisher
+            .sink(receiveCompletion: { _ in expectation.fulfill() },
+                  receiveValue: { results.append(normalized($0.timeIntervalSinceReferenceDate - now)) })
+            .store(in: &subscriptions)
+
+        wait(for: [expectation], timeout: 2)
+        XCTAssertEqual(results, expected)
+    }
 }
