@@ -94,4 +94,21 @@ class CombineOperatorsTests: XCTestCase {
         wait(for: [expectation], timeout: 2)
         XCTAssertEqual(results, expected)
     }
+
+    func test_shareReplay() {
+        let subject = PassthroughSubject<Int, Never>()
+        let sut = subject.shareReplay(capacity: 2)
+
+        var received: [Int] = []
+        sut.sink(receiveValue: { _ in })
+            .store(in: &subscriptions)
+        subject.send(1)
+        subject.send(2)
+        subject.send(3)
+        sut.sink(receiveValue: { received.append($0) })
+            .store(in: &subscriptions)
+
+        let expected = [2, 3]
+        XCTAssertEqual(received, expected)
+    }
 }
