@@ -9,8 +9,6 @@
 import Foundation
 import Combine
 
-//TODO: testear este ReplaySubject
-//TODO: hacer el operador de tryCatch que dispare un error y lleve un último publisher
 class ContentViewModel: ObservableObject {
     struct Model {
         let title: String

@@ -16,6 +16,8 @@
 		D33393652418285E000248D1 /* ContentViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33393642418285E000248D1 /* ContentViewModelTests.swift */; };
 		D333937124182875000248D1 /* ReplaySubject.swift in Sources */ = {isa = PBXBuildFile; fileRef = D333937024182875000248D1 /* ReplaySubject.swift */; };
 		D3339373241828FD000248D1 /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3339372241828FD000248D1 /* ContentViewModel.swift */; };
+		D3FD6E26241976730006BEAB /* ReplaySubjectSubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FD6E25241976730006BEAB /* ReplaySubjectSubscription.swift */; };
+		D3FD6E28241976E60006BEAB /* ReplaySubjectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3FD6E27241976E60006BEAB /* ReplaySubjectTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +44,8 @@
 		D33393662418285E000248D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D333937024182875000248D1 /* ReplaySubject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplaySubject.swift; sourceTree = "<group>"; };
 		D3339372241828FD000248D1 /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
+		D3FD6E25241976730006BEAB /* ReplaySubjectSubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplaySubjectSubscription.swift; sourceTree = "<group>"; };
+		D3FD6E27241976E60006BEAB /* ReplaySubjectTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReplaySubjectTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +112,7 @@
 			isa = PBXGroup;
 			children = (
 				D33393642418285E000248D1 /* ContentViewModelTests.swift */,
+				D3FD6E27241976E60006BEAB /* ReplaySubjectTests.swift */,
 				D33393662418285E000248D1 /* Info.plist */,
 			);
 			path = ReplaySubjectTests;
@@ -117,6 +122,7 @@
 			isa = PBXGroup;
 			children = (
 				D333937024182875000248D1 /* ReplaySubject.swift */,
+				D3FD6E25241976730006BEAB /* ReplaySubjectSubscription.swift */,
 			);
 			path = ReplaySubject;
 			sourceTree = "<group>";
@@ -222,6 +228,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3FD6E26241976730006BEAB /* ReplaySubjectSubscription.swift in Sources */,
 				D333934E2418285A000248D1 /* AppDelegate.swift in Sources */,
 				D33393502418285A000248D1 /* SceneDelegate.swift in Sources */,
 				D33393522418285A000248D1 /* ContentViewController.swift in Sources */,
@@ -235,6 +242,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D33393652418285E000248D1 /* ContentViewModelTests.swift in Sources */,
+				D3FD6E28241976E60006BEAB /* ReplaySubjectTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
