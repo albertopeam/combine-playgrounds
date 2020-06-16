@@ -20,6 +20,8 @@ class SnackBar: UIView {
         label.numberOfLines = 1
         label.textColor = .white
 
+        button.addTarget(self, action: #selector(click), for: .touchUpInside)
+
         addSubview(view)
         view.addSubview(label)
         view.addSubview(button)
@@ -45,6 +47,7 @@ class SnackBar: UIView {
     }
 
     func show(message: String, action: String? = nil, publisher: AnyPublisher<Void, Never>? = nil) {
+        //TODO: pending to create a publisher
         label.text = message
         button.setTitle(action, for: .selected)
         button.setTitle(action, for: .normal)
@@ -121,7 +124,6 @@ class ViewController: UIViewController, Subscriber {
         dataSource.songs = input.songs
         tableView.reloadData()
         if let error = input.error {
-            //TODO: publisher
             snackBar.show(message: error, action: input.retry)
         }
         return .unlimited
